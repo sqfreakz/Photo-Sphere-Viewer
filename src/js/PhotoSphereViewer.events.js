@@ -153,6 +153,41 @@ PhotoSphereViewer.prototype._startMove = function(evt) {
 };
 
 /**
+ * Initializes the movement by hover
+ * @param {MouseEvent} evt
+ * @private
+ */
+PhotoSphereViewer.prototype._startHover = function(evt) {
+  if (this.isGyroscopeEnabled()) {
+    return;
+  }
+
+  this.stopAll();
+  var boundingRect = this.container.getBoundingClientRect();
+
+  var data = {
+    target: evt.target,
+    client_x: evt.clientX,
+    client_y: evt.clientY,
+    viewer_x: parseInt(evt.clientX - boundingRect.left),
+    viewer_y: parseInt(evt.clientY - boundingRect.top)
+  };
+
+  var intersect = this.viewerCoordsToVector3(data.viewer_x, data.viewer_y);
+
+  if (intersect) {
+    var sphericalCoords = this.vector3ToSphericalCoords(intersect);
+
+    data.longitude = sphericalCoords.longitude;
+    data.latitude = sphericalCoords.latitude;
+    this.prop.moving = true;
+    this.prop.zooming = false;
+
+    this._hovering(data,evt);
+  }
+};
+
+/**
  * Initializes the zoom
  * @param {TouchEvent} evt
  * @private
@@ -295,6 +330,9 @@ PhotoSphereViewer.prototype._onMouseMove = function(evt) {
   if (evt.buttons !== 0) {
     evt.preventDefault();
     this._move(evt);
+  }else{
+    evt.preventDefault();
+    this._startHover(evt);
   }
 };
 
@@ -333,6 +371,32 @@ PhotoSphereViewer.prototype._move = function(evt) {
     this.prop.mouse_y = y;
 
     this._logMouseMove(evt);
+  }
+};
+
+/**
+ * Performs movement by hover
+ * @param {MouseEvent|Touch} evt
+ * @private
+ */
+PhotoSphereViewer.prototype._hovering = function(data,evt) {
+  var self = this,
+      x = data.viewer_x,
+      y = data.viewer_y,
+      halfWidth = this.prop.size.width / 2,
+      halfHeight = this.prop.size.height / 2,
+      calcX = (halfWidth - x) / (this.prop.size.width * 2),
+      calcY = (y - halfHeight) / (this.prop.size.height * 2.5);
+
+  if (this.prop.moving) {
+      this.animate({
+        longitude: this.prop.longitude - calcX,
+        latitude: this.prop.latitude - calcY
+      }, 2000).then(function(){
+		    setTimeout(function(){
+			    self.startAutorotate();
+		    }, 5000);
+	    });
   }
 };
 
@@ -387,6 +451,9 @@ PhotoSphereViewer.prototype._fullscreenToggled = function() {
     }
     else {
       this.stopKeyboardControl();
+      if(this.isVREnabled()){
+        this.toggleVR();
+      }
     }
   }
 

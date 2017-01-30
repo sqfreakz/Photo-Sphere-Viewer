@@ -66,6 +66,14 @@ PhotoSphereViewer.prototype.isFullscreenEnabled = function() {
 };
 
 /**
+ * Check if the viewer is in fullscreen
+ * @returns {boolean}
+ */
+PhotoSphereViewer.prototype.isVREnabled = function() {
+  return PSVUtils.isVREnabled();
+};
+
+/**
  * Performs a render
  * @param {boolean} [updateDirection=true] - should update camera direction
  */
@@ -86,11 +94,17 @@ PhotoSphereViewer.prototype.render = function(updateDirection) {
   this.camera.fov = this.prop.vFov;
   this.camera.updateProjectionMatrix();
 
-  if (this.composer) {
-    this.composer.render();
-  }
-  else {
-    this.renderer.render(this.scene, this.camera);
+  if(this.isVREnabled()){
+    console.log('true');
+    this.effect.setSize( window.innerWidth, window.innerHeight );
+	  this.effect.render(this.scene, this.camera);
+  }else{
+    if (this.composer) {
+      this.composer.render();
+    }
+    else {
+      this.renderer.render(this.scene, this.camera);
+    }
   }
 
   this.trigger('render');
@@ -558,4 +572,33 @@ PhotoSphereViewer.prototype.getPanoramaCache = function(panorama) {
   return this.prop.cache.filter(function(cache) {
     return cache.panorama === panorama;
   }).shift();
+};
+
+/**
+ * Enables/disables VR
+ */
+PhotoSphereViewer.prototype.toggleVR = function() {
+  if (!this.isVREnabled()) {
+    
+
+    this.toggleFullscreen();
+    this.toggleGyroscopeControl();
+
+    this.effect = new THREE.StereoEffect(this.renderer);
+    this.effect.setSize( window.innerWidth, window.innerHeight );
+    this.effect.render(this.scene, this.camera);
+    
+    PSVUtils.toggleisVR();
+  }
+  else {
+    PSVUtils.toggleisVR();
+
+    this.effect = null;
+
+    this.toggleFullscreen();
+    this.toggleGyroscopeControl();
+
+    this.renderer.setSize(this.prop.size.width, this.prop.size.height);
+    this.render();
+  }
 };

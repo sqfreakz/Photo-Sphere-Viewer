@@ -80,6 +80,10 @@ PSVNavBar.prototype.create = function() {
             this.items.push(new PSVNavBarGyroscopeButton(this));
           }
           break;
+        
+        case PSVNavBarVRButton.id:
+          this.items.push(new PSVNavBarVRButton(this));
+          break;
 
         case 'caption':
           this.items.push(new PSVNavBarCaption(this, this.psv.config.caption));

@@ -49,7 +49,7 @@ PhotoSphereViewer.SYSTEM = {
   deviceOrientationSupported: null,
   maxTextureWidth: 0,
   mouseWheelEvent: null,
-  fullscreenEvent: null
+  fullscreenEvent: null,
 };
 
 /**
@@ -84,7 +84,8 @@ PhotoSphereViewer.DEFAULTS = {
     'markers',
     'caption',
     'gyroscope',
-    'fullscreen'
+    'fullscreen',
+    'vr'
   ],
   tooltip: {
     offset: 5,
@@ -99,7 +100,8 @@ PhotoSphereViewer.DEFAULTS = {
     download: 'Download',
     fullscreen: 'Fullscreen',
     markers: 'Markers',
-    gyroscope: 'Gyroscope'
+    gyroscope: 'Gyroscope',
+    vr:'VR'
   },
   mousewheel: true,
   mousemove: true,

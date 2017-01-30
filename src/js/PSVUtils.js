@@ -17,6 +17,12 @@ PSVUtils.TwoPI = Math.PI * 2.0;
 PSVUtils.HalfPI = Math.PI / 2.0;
 
 /**
+ * Default state for VR
+ * @type {boolean}
+ */
+PSVUtils.isVR = false;
+
+/**
  * Check if some Three.js components are loaded
  * @param {...string} components
  * @returns {boolean}
@@ -262,6 +268,21 @@ PSVUtils.requestFullscreen = function(elt) {
  */
 PSVUtils.exitFullscreen = function() {
   (document.exitFullscreen || document.mozCancelFullScreen || document.webkitExitFullscreen || document.msExitFullscreen).call(document);
+};
+
+/**
+ * Detects whether VR is enabled or not
+ * @returns {boolean}
+ */
+PSVUtils.isVREnabled = function() {
+  return PSVUtils.isVR;
+};
+
+/**
+ * Toggle VR state
+ */
+PSVUtils.toggleisVR = function() {
+  PSVUtils.isVR = !PSVUtils.isVR;
 };
 
 /**
