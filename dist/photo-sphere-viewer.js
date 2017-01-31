@@ -1,5 +1,5 @@
 /*!
- * Photo Sphere Viewer 3.3.0
+ * Photo Sphere Viewer 3.3.1
  * Copyright (c) 2014-2015 Jérémy Heleine
  * Copyright (c) 2015-2017 Damien "Mistic" Sorel
  * Licensed under MIT (http://opensource.org/licenses/MIT)
@@ -1466,7 +1466,6 @@ PhotoSphereViewer.prototype.render = function(updateDirection) {
   this.camera.updateProjectionMatrix();
 
   if(this.isVREnabled()){
-    console.log('true');
     this.effect.setSize( window.innerWidth, window.innerHeight );
 	  this.effect.render(this.scene, this.camera);
   }else{
@@ -1492,6 +1491,10 @@ PhotoSphereViewer.prototype.destroy = function() {
     PSVUtils.exitFullscreen();
   }
 
+  if (this.isVREnabled()){
+    this.toggleVR();
+  }
+  
   // remove listeners
   window.removeEventListener('resize', this);
   document.removeEventListener(PhotoSphereViewer.SYSTEM.fullscreenEvent, this);
@@ -1538,6 +1541,11 @@ PhotoSphereViewer.prototype.destroy = function() {
   }
   this.parent.removeChild(this.container);
 
+  // remove effect
+  if (this.effect) {
+    this.effect = null;
+  }
+
   delete this.parent.photoSphereViewer;
 
   // clean references
@@ -1558,6 +1566,7 @@ PhotoSphereViewer.prototype.destroy = function() {
   delete this.raycaster;
   delete this.passes;
   delete this.config;
+  delete this.effect;
   this.prop.cache.length = 0;
 };
 

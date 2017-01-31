@@ -11,6 +11,11 @@
       "name": "Damien \"Mistic\" Sorel",
       "email": "contact@git.strangeplanet.fr",
       "homepage": "http://www.strangeplanet.fr"
+    },
+    {
+      "name": "M Amiruddin Irsyad",
+      "email": "amiruddinid@gmail.com",
+      "homepage": "http://sqfreakz.id"
     }
   ],
   "description": "A JavaScript library to display Photo Sphere panoramas",
@@ -47,7 +52,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/mistic100/Photo-Sphere-Viewer.git"
+    "url": "git://github.com/sqfreakz/Photo-Sphere-Viewer-Custom.git"
   },
   "scripts": {
     "test": "grunt test"
